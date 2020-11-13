@@ -25,6 +25,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/dimchansky/utfbom"
 	"io"
 	"log"
 	"os"
@@ -1577,7 +1578,7 @@ func unmarshalReader(in io.Reader, c map[string]interface{}) error {
 
 func (v *Viper) unmarshalReader(in io.Reader, c map[string]interface{}) error {
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(in)
+	buf.ReadFrom(utfbom.SkipOnly(in))
 
 	switch strings.ToLower(v.getConfigType()) {
 	case "yaml", "yml":
@@ -1874,7 +1875,7 @@ func (v *Viper) WatchRemoteConfigOnChannel() error {
 // Retrieve the first found remote configuration.
 func (v *Viper) getKeyValueConfig() error {
 	if RemoteConfig == nil {
-		return RemoteConfigError("Enable the remote features by doing a blank import of the viper/remote package: '_ github.com/spf13/viper/remote'")
+		return RemoteConfigError("Enable the remote features by doing a blank import of the viper/remote package: '_ github.com/LankoRu/viper/remote'")
 	}
 
 	for _, rp := range v.remoteProviders {
